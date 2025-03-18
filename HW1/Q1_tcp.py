@@ -1,6 +1,7 @@
 import socket
 import threading
 
+#Function to start TCP server
 def start_tcp_server(host='127.0.0.1', port=12345):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.bind((host, port))
@@ -14,7 +15,7 @@ def start_tcp_server(host='127.0.0.1', port=12345):
         data = conn.recv(1024)
         if not data:
             break
-        conn.sendall(data.upper())
+        conn.sendall(data.upper())   #Sends back recieved Data after converting to uppercase
     
     conn.close()
     server_socket.close()
@@ -23,10 +24,11 @@ def start_tcp_client(server_host='127.0.0.1', server_port=12345):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((server_host, server_port))
     
-    msg = input("Enter message: ")
-    client_socket.sendall(msg.encode())
-    data = client_socket.recv(1024)
-    print(f"Received: {data.decode()}")
+    while True:    #causes it to run in infinite loop
+        msg = input("Enter message: ")
+        client_socket.sendall(msg.encode())
+        data = client_socket.recv(1024)
+        print(f"Received: {data.decode()}")
     
     client_socket.close()
 

@@ -4,7 +4,7 @@ import sys
 
 exit_event = threading.Event()
 
-def receive_messages(sock):
+def receive_messages(sock):   #this the thread function for recieving messages
     global exit_event
     while not exit_event.is_set():
         try:
@@ -12,7 +12,7 @@ def receive_messages(sock):
             data, addr = sock.recvfrom(1024)
             message = data.decode()
             print(f"\nReceived from {addr}: {message}")
-            if message.lower() in ["exit", "bye"]:
+            if message.lower() in ["exit", "bye"]:  #This sets exit event is exit is recieved over any thread
                 print("Received exit command. Closing chat.")
                 exit_event.set()
                 break
@@ -21,13 +21,13 @@ def receive_messages(sock):
         except OSError:
             break  
 
-def send_messages(sock, target_ip, target_port):
+def send_messages(sock, target_ip, target_port):    #this the thread function for sending messages
     global exit_event
     while not exit_event.is_set():
         try:
             sock.settimeout(1)
             msg = input("You: ")
-            if msg.lower() in ["exit", "bye"]:
+            if msg.lower() in ["exit", "bye"]:      #This sets exit event is exit is recieved over any thread
                 exit_event.set()
                 break
             sock.sendto(msg.encode(), (target_ip, target_port))
@@ -46,7 +46,7 @@ def start_udp_chat(my_port, target_ip, target_port):
     receive_thread.start()
     send_thread.start()
     exit_event.wait() # This blocks following commands until exit is sent over any of the following commands
-    sock.sendto("Goodbye".encode(), (target_ip, target_port))  
+    sock.sendto("Goodbye".encode(), (target_ip, target_port))  # A goodbye message is sent to UDP monitor to demarcate closure of chat  
     sock.close()    
     send_thread.join() 
     receive_thread.join() 

@@ -1,22 +1,24 @@
 import socket
 import threading
 
+#Function to start UDP server
 def start_udp_server(host='127.0.0.1', port=12345):
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_socket.bind((host, port))
+    server_socket.bind((host, port))                                             #Binds server to target host
     print(f"UDP Server listening on {host}:{port}")
     
     while True:
         data, addr = server_socket.recvfrom(1024)
         print(f"Received from {addr}: {data.decode()}")
-        server_socket.sendto(data.upper(), addr)
+        server_socket.sendto(data.upper(), addr)  #Sends back recieved Data after converting to uppercase
 
+#Function to start UDP_client
 def start_udp_client(server_host='127.0.0.1', server_port=12345):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     
-    while True:
-        msg = input("Enter message: ")
-        client_socket.sendto(msg.encode(), (server_host, server_port))
+    while True:    #causes it to run in infinite loop
+        msg = input("Enter message: ")                                          #Take input message from user
+        client_socket.sendto(msg.encode(), (server_host, server_port))          #sends message to server
         data, _ = client_socket.recvfrom(1024)
         print(f"Received: {data.decode()}")
     

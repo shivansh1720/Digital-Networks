@@ -87,6 +87,7 @@ python3 Q2.py 5000 192.168.1.100 6000
 ---
 
 ## Notes
+- Both the applications are able to recieve only messaages which are about 1024 characters long. For messages longer than this , Only first 1024 characters will be recieved.
 - Ensure that both **PC and mobile** are on the **same network**.
 - The UDP chat uses **multi-threading**, so both sending and receiving work in parallel.
 - The application properly **exits when "exit" or "bye" is received**.
