@@ -43,13 +43,14 @@ def start_udp_chat(my_port, target_ip, target_port):
     
     receive_thread = threading.Thread(target=receive_messages, args=(sock,))
     send_thread = threading.Thread(target=send_messages, args=(sock, target_ip, target_port))
-    receive_thread.start()
-    send_thread.start()
+    receive_thread.start()   #starts the receive thread
+    send_thread.start()      #starts the send thread
+
     exit_event.wait() # This blocks following commands until exit is sent over any of the following commands
     sock.sendto("Goodbye".encode(), (target_ip, target_port))  # A goodbye message is sent to UDP monitor to demarcate closure of chat  
-    sock.close()    
-    send_thread.join() 
-    receive_thread.join() 
+    sock.close()                               # Close the socket
+    send_thread.join()                         # Send thread is exited
+    receive_thread.join()                      # Receive thread is exited
     
 
 if __name__ == "__main__":
